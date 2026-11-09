@@ -4,7 +4,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import accuracy_score
 
-df = pd.read_csv("SMSSpamCollection.csv", sep="\t", header=None, names=["label", "message"])
+df = pd.read_csv("D:/laptrinh/pythonn/hocmay/baitap/bai2/SMSSpamCollection.csv", sep="\t", header=None, names=["label", "message"])
 df
 
 def count_char(message):
@@ -17,24 +17,18 @@ def count_char(message):
             digit_count += 1
     return pd.Series([letter_count, digit_count])
 
-df[["letter_count", "digit_count"]] = (
-    df["message"].apply(count_char))
+df[["letter_count", "digit_count"]] = (df["message"].apply(count_char))
 
-# 1. Khai báo X và y
 X = df[["letter_count", "digit_count"]]
 y = df["label"]
 
-X_train, X_test, y_train, y_test = train_test_split(
-    X,
-    y,
-    test_size=0.2,
-    random_state=36,
-    stratify=y
-)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=36, stratify=y)
 
 knn = KNeighborsClassifier(n_neighbors=5, metric="euclidean")
 knn.fit(X_train, y_train)
 y_pred = knn.predict(X_test)
+
+print("Accuracy:", accuracy_score(y_test, y_pred))
 
 #new_message = "Congratulations! You won 1000 dollars"
 #new_features = count_char(new_message)
